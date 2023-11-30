@@ -1,0 +1,59 @@
+###  FILES  ###
+TODO*.*
+*.pptx
+*.pdf
+CMakeUserPresets.json
+
+### FOLDERS ###
+build/
+html/
+lectures/
+
+### C/C++ ###
+#-----------#
+# Prerequisites
+*.d
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+*.ko
+*.elf
+# Precompiled Headers
+*.gch
+*.pch
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+# Fortran module files
+*.mod
+*.smod
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+# Executables
+*.i*86
+*.x86_64
+*.hex
+*.app
+*.stackdump
+*.exe
+*.out
+# Linker output
+*.ilk
+*.map
+*.exp
+# Debug files
+*.dSYM/
+*.su
+*.idb
+*.pdb
+
+### VSCode ###
+.vscode
+*.code-workspace
+.history
