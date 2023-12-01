@@ -24,7 +24,10 @@ add_definitions(-Wno-unused-private-field)
 add_definitions(-Wno-unneeded-internal-declaration)
 ]]
 
-add_executable(lambda-experiment "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+# add_library(lambda-lib "${CMAKE_CURRENT_SOURCE_DIR}/src/lambda-w-compiler-magic/magic-w-lambdas.hpp")
+
+add_executable(lambda-src "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
+                          "${CMAKE_CURRENT_SOURCE_DIR}/src/lambda-w-compiler-magic/magic-w-lambdas.cpp")
 
 #[[
 include(/home/fatih/vcpkg/scripts/buildsystems/vcpkg.cmake)    # vcpkg.cmake

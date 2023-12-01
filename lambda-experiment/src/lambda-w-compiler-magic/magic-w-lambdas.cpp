@@ -1,78 +1,59 @@
-#include <concepts>
-// lambda version
+#include "magic-w-lambdas.hpp"
 
 void lambda()
 {
-    auto l = []([[maybe_unused]] int value, int &value2) noexcept -> long {
-        return ++value + value2++;
-    };
-    long (*fp)(int, int &) = l;
+  auto l = []([[maybe_unused]] int value, int &value2) noexcept -> long {
+    return ++value + value2++;
+  };
+  long (*fp)(int, int &) = l;
 }
 
 void lambda1()
 {
-    auto l1 =
-        [] [[nodiscard]] (std::floating_point auto... value) noexcept -> long {
-        return (value + ...);
-    };
+  auto l1 =
+    [] [[nodiscard]] (std::floating_point auto... value) noexcept -> long {
+    return (value + ...);
+  };
 
-    auto result = l1(1.0, 2.1, 3.2, 4.3, 5.4);
+  auto result = l1(1.0, 2.1, 3.2, 4.3, 5.4);
 }
 
-// equivalent code from compiler
-
-class Lambda
+void lambda2()
 {
-    template <typename T>
-    using pointer_type = long (*)(T, int &) noexcept;
+  auto l2 = []<std::size_t... Idx>(std::index_sequence<Idx...>) noexcept->long
+  {
+    return (Idx + ...);
+  };
 
-    template <typename T>
-    constexpr static auto func([[maybe_unused]] T value, int &value2) noexcept
-        -> long
-    {
-        return ++value + value2++;
-    }
+  auto result = l2(std::make_index_sequence<10>());
+}
 
-    constexpr static auto func_int(int value, int &value2) noexcept -> long
-    {
-        return ++value + value2++;
-    }
-
-public:
-    template <typename T>
-    constexpr auto operator()([[maybe_unused]] T value,
-                              int &value2) const noexcept -> long
-    {
-        return ++value + value2++;
-    }
-
-    template <typename T>
-    constexpr operator pointer_type<T>() const
-    {
-        return func;
-    }
-
-    constexpr operator pointer_type<int>() const
-    {
-        return func_int;
-    }
-};
-
-class Lambda1
+void lambda3()
 {
-public:
-    template <std::floating_point... T>
-    [[nodiscard]] constexpr auto operator()(T... value) const noexcept -> long
+  auto sum_tuple = []<typename... T>(const std::tuple<T...> &input) {
+    return
+      []<std::size_t... Idx>(std::index_sequence<Idx...>, const auto &tuple)
     {
-        return (value + ...);
+      return (std::get<Idx>(tuple) + ...);
     }
-};
+    (std::make_index_sequence<sizeof...(T)>(), input);
+  };
+  auto result = sum_tuple(std::make_tuple(1, 2ll, 3l, 4.5));
+}
+
+// ---------------------------------------------------------------------------- //
 
 void equivalent()
 {
-    auto l = Lambda();
-    long (*fp)(int, int &) = l;
+  auto l = Lambda();
+  long (*fp)(int, int &) = l;
 
-    auto l1 = Lambda1{};
-    auto result = l1(1.0, 2.1, 3.2, 4.3, 5.4);
+  auto l1 = Lambda1{};
+  auto result = l1(1.0, 2.1, 3.2, 4.3, 5.4);
+
+  auto l2 = Lambda2{};
+  auto result2 = l2(std::make_index_sequence<10>());
+
+  auto l3 = Lambda3{};
+  auto result3 = l3(std::make_tuple(1, 2ll, 3l, 4.5));
 }
