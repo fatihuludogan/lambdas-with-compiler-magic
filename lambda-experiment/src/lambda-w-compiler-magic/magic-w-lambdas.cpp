@@ -86,6 +86,42 @@ auto lambda7(int value)
   return [/*&*/ value](int x) { return x + value; };
 }
 
+auto lambda8()
+{
+  auto overload_set = overloaded{[](int x) { return x + 42; },
+                                 [](int x, int y) { return x + y; }};
+
+  return overload_set(12);
+}
+
+std::vector<int> get_data();
+auto lambda9()
+{
+  auto l = [i = 0](int value) mutable {
+    std::cout << value << ": " << i++ << '\n';
+  };
+
+  std::ranges::for_each(get_data(), l);
+  std::ranges::for_each(get_data(), std::ref(l));
+  std::ranges::for_each(get_data(), l);
+}
+
+auto lambda10()
+{
+  std::function f = [i = 12](int j, bool b) mutable {
+    if (b)
+    {
+      return i++;
+    }
+    else
+    {
+      return j;
+    }
+  };
+
+  auto f2 = f;
+}
+
 // ---------------------------------------------------------------------------- //
 
 auto equivalent()

@@ -1,7 +1,11 @@
 #ifndef MAGIC_W_LAMBDAS_HPP
 #define MAGIC_W_LAMBDAS_HPP
 
+#include <algorithm>
 #include <concepts>
+#include <functional>
+#include <iostream>
+#include <ranges>
 #include <tuple>
 #include <utility>
 #include <vector>
@@ -119,5 +123,14 @@ public:
 private:
   int value;
 };
+
+template <typename... Ts>
+struct overloaded : Ts...
+{
+  using Ts::operator()...;
+};
+
+template <typename... Ts>
+overloaded(Ts...) -> overloaded<Ts...>;
 
 #endif // MAGIC_W_LAMBDAS_HPP

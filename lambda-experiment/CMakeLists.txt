@@ -28,9 +28,3 @@ add_definitions(-Wno-unneeded-internal-declaration)
 
 add_executable(lambda-src "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp"
                           "${CMAKE_CURRENT_SOURCE_DIR}/src/lambda-w-compiler-magic/magic-w-lambdas.cpp")
-
-#[[
-include(/home/fatih/vcpkg/scripts/buildsystems/vcpkg.cmake)    # vcpkg.cmake
-find_package(fmt)
-target_link_libraries(lambda-experiment PRIVATE fmt::fmt project_options)
-]]
