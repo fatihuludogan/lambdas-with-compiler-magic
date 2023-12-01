@@ -4,21 +4,7 @@ project(lambda-experiment)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(oneValueArgs TARGET ENABLE AS_ERRORS)
-cmake_parse_arguments(
-    TARGET_SET_WARNINGS
-    "${options}"
-    "${oneValueArgs}"
-    "${multiValueArgs}"
-    ${ARGN})
-
-if(NOT ${TARGET_SET_WARNINGS_ENABLE})
-    message(STATUS "Warnings Disabled for: ${TARGET_SET_WARNINGS_TARGET}")
-    return()
-endif()
-message(STATUS "Warnings Active for: ${TARGET_SET_WARNINGS_TARGET}")
-message(STATUS "Warnings as Errors: ${TARGET_SET_WARNINGS_AS_ERRORS}")
-
+#[[
 add_definitions(-Wall)
 add_definitions(-Wextra)
 add_definitions(-Wshadow)
@@ -36,3 +22,12 @@ add_definitions(-Woverloaded-virtual)
 add_definitions(-Weffc++)
 add_definitions(-Wno-unused-private-field)
 add_definitions(-Wno-unneeded-internal-declaration)
+]]
+
+add_executable(lambda-experiment "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
+
+#[[
+include(/home/fatih/vcpkg/scripts/buildsystems/vcpkg.cmake)    # vcpkg.cmake
+find_package(fmt)
+target_link_libraries(lambda-experiment PRIVATE fmt::fmt project_options)
+]]
