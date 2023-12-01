@@ -41,9 +41,54 @@ void lambda3()
   auto result = sum_tuple(std::make_tuple(1, 2ll, 3l, 4.5));
 }
 
+auto lambda4()
+{
+  int i = 42;
+  int j = 24;
+  auto l = [i, &j]() mutable {
+    ++j;
+    return ++i;
+  };
+  l();
+  auto l2 = l;
+  l();
+}
+
+auto lambda5()
+{
+  auto l = [a = 1, b = true, c = 2, d = false]() {};
+}
+
+auto lambda6()
+{
+  const auto data = [](int i) { return std::vector<int>{1, 2, 3, 4, i}; }(42);
+}
+
+/* This is C++23 feature most of the compilers didn't have the C++ 23 support
+auto lambda7()
+{
+  const auto data = [](this auto self, int i) {
+    if (i > 0)
+    {
+      return i + self(i - 1);
+    }
+    else
+    {
+      return i;
+    }
+  }(10);
+}
+*/
+
+// adding ref causes undefined behaviour because value is function parameter (dangling reference)
+auto lambda7(int value)
+{ // using copy instead of reference
+  return [/*&*/ value](int x) { return x + value; };
+}
+
 // ---------------------------------------------------------------------------- //
 
-void equivalent()
+auto equivalent()
 {
   auto l = Lambda();
   long (*fp)(int, int &) = l;
@@ -56,4 +101,19 @@ void equivalent()
 
   auto l3 = Lambda3{};
   auto result3 = l3(std::make_tuple(1, 2ll, 3l, 4.5));
+
+  {
+    int i = 42;
+    int j = 24;
+    auto l4_ = Lambda4{i, j};
+    l4_();
+    auto l4 = l4_;
+    l4_();
+    l4_();
+    return l2;
+  }
+
+  auto l5 = Lambda5{1, true, 2, false};
+
+  auto l7 = Lambda7(5);
 }

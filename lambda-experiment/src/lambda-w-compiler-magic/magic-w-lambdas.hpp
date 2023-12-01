@@ -4,6 +4,7 @@
 #include <concepts>
 #include <tuple>
 #include <utility>
+#include <vector>
 
 class Lambda
 {
@@ -22,7 +23,7 @@ class Lambda
     return ++value + value2++;
   }
 
-  public:
+public:
   template <typename T>
   constexpr auto operator()([[maybe_unused]] T value,
                             int &value2) const noexcept -> long
@@ -44,7 +45,7 @@ class Lambda
 
 class Lambda1
 {
-  public:
+public:
   template <std::floating_point... T>
   [[nodiscard]] constexpr auto operator()(T... value) const noexcept -> long
   {
@@ -54,7 +55,7 @@ class Lambda1
 
 class Lambda2
 {
-  public:
+public:
   template <std::size_t... Idx>
   constexpr auto operator()(std::index_sequence<Idx...>) const noexcept -> long
   {
@@ -73,12 +74,50 @@ class Lambda3
     }
   };
 
-  public:
+public:
   template <typename... T>
   constexpr auto operator()(const std::tuple<T...> &input) const noexcept
   {
     return Lambda_{}(std::make_index_sequence<sizeof...(T)>(), input);
   }
+};
+
+struct Lambda4
+{
+  constexpr auto operator()()
+  {
+    ++j;
+    return ++i;
+  }
+  int i;
+  int &j;
+};
+
+struct Lambda5
+{
+  constexpr auto operator()()
+  {
+  }
+  int a;
+  bool b;
+  int c;
+  bool d;
+};
+
+class Lambda7
+{
+public:
+  Lambda7(int value) : value(value)
+  {
+  }
+
+  constexpr auto operator()(int x) const
+  {
+    return x + value;
+  }
+
+private:
+  int value;
 };
 
 #endif // MAGIC_W_LAMBDAS_HPP
