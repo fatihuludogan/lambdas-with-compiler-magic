@@ -1,3 +1,4 @@
+#include <concepts>
 // lambda version
 
 void lambda()
@@ -6,6 +7,16 @@ void lambda()
         return ++value + value2++;
     };
     long (*fp)(int, int &) = l;
+}
+
+void lambda1()
+{
+    auto l1 =
+        [] [[nodiscard]] (std::floating_point auto... value) noexcept -> long {
+        return (value + ...);
+    };
+
+    auto result = l1(1.0, 2.1, 3.2, 4.3, 5.4);
 }
 
 // equivalent code from compiler
@@ -47,8 +58,21 @@ public:
     }
 };
 
+class Lambda1
+{
+public:
+    template <std::floating_point... T>
+    [[nodiscard]] constexpr auto operator()(T... value) const noexcept -> long
+    {
+        return (value + ...);
+    }
+};
+
 void equivalent()
 {
     auto l = Lambda();
     long (*fp)(int, int &) = l;
+
+    auto l1 = Lambda1{};
+    auto result = l1(1.0, 2.1, 3.2, 4.3, 5.4);
 }
