@@ -19,7 +19,7 @@ class Lambda
   constexpr static auto func([[maybe_unused]] T value, int &value2) noexcept
     -> long
   {
-    return ++value + value2++;
+    return static_cast<long>(++value + value2++);
   }
 
   constexpr static auto func_int(int value, int &value2) noexcept -> long
@@ -132,5 +132,58 @@ struct overloaded : Ts...
 
 template <typename... Ts>
 overloaded(Ts...) -> overloaded<Ts...>;
+
+class Lambda8
+{
+public:
+  constexpr auto operator()(int x) const
+  {
+    return x + 42;
+  }
+  constexpr auto operator()(int x, int y) const noexcept
+  {
+    return x + y;
+  }
+};
+
+std::vector<int, std::allocator<int>> get_data();
+class Lambda9
+{
+public:
+  constexpr auto operator()(int value)
+  {
+    std::operator<<(
+      std::operator<<(std::cout.operator<<(value), ":").operator<<(i++),
+      '\n');
+  }
+
+
+private:
+  int i;
+};
+
+class Lambda10
+{
+public:
+  Lambda10(int j, bool b) : i(12)
+  {
+  }
+
+  constexpr auto operator()(int j, bool b)
+  {
+    if (b)
+    {
+      return i++;
+    }
+    else
+    {
+      return j;
+    }
+  }
+
+private:
+  int i, j;
+  bool b;
+};
 
 #endif // MAGIC_W_LAMBDAS_HPP

@@ -151,5 +151,7 @@ auto equivalent()
 
   auto l5 = Lambda5{1, true, 2, false};
 
-  auto l7 = Lambda7(5);
+  auto l7 = Lambda7{5};
+
+  auto l10 = Lambda10{34, true};
 }
